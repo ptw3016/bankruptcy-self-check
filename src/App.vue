@@ -1,0 +1,32 @@
+<script setup>
+import { RouterView } from 'vue-router'
+
+import KioskLayout from './layouts/KioskLayout.vue'
+</script>
+
+<template>
+  <KioskLayout>
+    <RouterView v-slot="{ Component }">
+      <Transition name="page" mode="out-in">
+        <component :is="Component" />
+      </Transition>
+    </RouterView>
+  </KioskLayout>
+</template>
+
+<style scoped>
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+</style>
