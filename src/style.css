@@ -51,6 +51,12 @@
   --animate-pulse-subtle: pulseSubtle 4s ease-in-out infinite;
   --animate-grain: grain 8s steps(10) infinite;
   --animate-reveal: reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  --animate-shine-infinite: shineInfinite 3s linear infinite;
+}
+
+@keyframes shineInfinite {
+  0% { transform: skewX(-20deg) translateX(-300%); }
+  100% { transform: skewX(-20deg) translateX(300%); }
 }
 
 @keyframes fadeIn {

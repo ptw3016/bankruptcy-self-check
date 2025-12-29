@@ -9,7 +9,7 @@ import CorporateDiagnosisPage from '../pages/CorporateDiagnosis.vue'
 import NotFoundPage from '../pages/NotFound.vue'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/', name: 'home', component: HomePage },
     { path: '/personal', name: 'personal', component: PersonalPage },

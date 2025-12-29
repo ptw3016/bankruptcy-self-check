@@ -182,7 +182,20 @@ function goBack() {
 </script>
 
 <template>
-  <section class="flex min-h-[calc(100dvh-3rem)] md:min-h-[calc(100dvh-4rem)] flex-col pt-0 pb-4 md:justify-center">
+  <div class="fixed inset-0 pointer-events-none z-[60] flex flex-col justify-end p-4 md:hidden">
+    <div class="w-full max-w-2xl mx-auto pointer-events-auto px-1">
+      <Button
+        v-if="currentStep <= questions.length"
+        class="w-full h-auto text-sm font-bold bg-gradient-to-r from-primary-700 via-primary-600 to-primary-700 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.3)] border-[0.5px] border-primary-400/30 py-3 px-3"
+        :disabled="!answers[currentQuestion?.id]"
+        @click="nextQuestion"
+      >
+        다음
+      </Button>
+    </div>
+  </div>
+
+  <section class="flex min-h-[calc(100dvh-3rem)] md:min-h-[calc(100dvh-4rem)] flex-col pt-0 pb-24 md:pb-4 md:justify-center">
     <QuestionCard
       v-if="currentStep <= questions.length"
       class="flex-1"
@@ -192,12 +205,14 @@ function goBack() {
       @next="nextQuestion"
     >
       <template #header>
-        <ProgressBar 
-          :current-step="currentStep" 
-          :total-steps="totalSteps" 
-          :show-back-button="true"
-          @back="goBack"
-        />
+        <div class="mb-6 md:mb-0">
+          <ProgressBar 
+            :current-step="currentStep" 
+            :total-steps="totalSteps" 
+            :show-back-button="true"
+            @back="goBack"
+          />
+        </div>
       </template>
     </QuestionCard>
 

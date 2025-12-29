@@ -1,108 +1,229 @@
 <script setup>
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Building2, User, ChevronRight } from 'lucide-vue-next'
-import Button from '../components/ui/button/Button.vue'
+import { Building2, User, ChevronRight, ChevronDown } from 'lucide-vue-next'
+import gsap from 'gsap'
 
 const router = useRouter()
 
+// Refs for animation targets
+const headerSection = ref(null)
+const personalCard = ref(null)
+const corporateCard = ref(null)
+const footerSection = ref(null)
+const mainContainer = ref(null)
+const showScrollBadge = ref(true)
+
+const handleScroll = () => {
+  if (window.scrollY > 50) {
+    showScrollBadge.value = false
+  } else {
+    showScrollBadge.value = true
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
+// Animation Logic
+function handleTransition(targetCard, otherCard, routePath, isLeftCardSelected) {
+  // Prevent double clicks
+  if (mainContainer.value) {
+    mainContainer.value.style.pointerEvents = 'none'
+  }
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      router.push(routePath)
+    }
+  })
+
+  // 1. Header slides up
+  tl.to(headerSection.value, {
+    y: -100,
+    opacity: 0,
+    duration: 0.6,
+    ease: 'power3.in',
+  }, 0)
+
+  // 2. Footer slides down
+  tl.to(footerSection.value, {
+    y: 100,
+    opacity: 0,
+    duration: 0.6,
+    ease: 'power3.in',
+  }, 0)
+
+  // 3. Other card slides away (Left card goes left, Right card goes right)
+  // If Left(Personal) is selected, Right(Corporate) moves Right (+100%)
+  // If Right(Corporate) is selected, Left(Personal) moves Left (-100%)
+  const xMove = isLeftCardSelected ? '50%' : '-50%'
+  
+  tl.to(otherCard, {
+    x: xMove,
+    opacity: 0,
+    duration: 0.6,
+    ease: 'power3.in',
+  }, 0)
+
+  // 4. Selected card highlights
+  tl.to(targetCard, {
+    scale: 1.1,
+    boxShadow: '0 0 100px rgba(198,167,98,0.5)',
+    duration: 0.8,
+    ease: 'elastic.out(1, 0.5)',
+    zIndex: 50
+  }, 0)
+
+  // 5. Final transition
+  tl.to(targetCard, {
+    opacity: 0,
+    scale: 1.2,
+    duration: 0.3,
+    ease: 'power2.in'
+  }, '-=0.2')
+}
+
+function scrollToCorporate() {
+  corporateCard.value?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
 function goPersonal() {
-  router.push('/personal')
+  handleTransition(personalCard.value, corporateCard.value, '/personal', true)
 }
 
 function goCorporate() {
-  router.push('/corporate')
+  handleTransition(corporateCard.value, personalCard.value, '/corporate', false)
 }
 </script>
 
 <template>
-  <section class="flex flex-col items-center justify-center gap-6 md:gap-10 py-8 md:py-12">
+  <section ref="mainContainer" class="flex flex-col items-center justify-center gap-4 md:gap-8 py-4 md:py-8 min-h-[calc(100vh-80px)]">
     <!-- 헤더 섹션 -->
-    <div class="text-center space-y-4 md:space-y-6 max-w-5xl mx-auto px-4 relative">
+    <div ref="headerSection" class="text-center space-y-3 md:space-y-4 max-w-5xl mx-auto px-4 relative">
       <!-- 장식 요소 -->
       <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-accent-500/5 blur-[80px] rounded-full pointer-events-none" />
 
-      <div class="inline-flex items-center rounded-full border border-accent-400/30 bg-primary-900/40 backdrop-blur-md px-4 py-1.5 text-xs md:text-sm font-medium text-accent-200 shadow-[0_0_20px_rgba(198,167,98,0.1)] animate-fade-in" style="animation-delay: 0.1s;">
-        <span class="mr-2 h-1.5 w-1.5 rounded-full bg-accent-400 animate-pulse"></span>
-        <span class="tracking-wide">개인/법인 회생·파산 무료 진단</span>
+      <div class="inline-flex items-center rounded-full border border-accent-400/30 bg-primary-900/40 backdrop-blur-md px-3 py-1 text-[10px] md:text-xs font-medium text-accent-200 shadow-[0_0_20px_rgba(198,167,98,0.1)] animate-fade-in" style="animation-delay: 0.1s;">
+        <span class="mr-2 h-1 w-1 rounded-full bg-accent-400 animate-pulse"></span>
+        <span class="tracking-wide uppercase">Free Diagnosis System</span>
       </div>
       
-      <div class="space-y-2 md:space-y-3 relative">
-        <h1 class="font-serif text-3xl md:text-5xl lg:text-6xl font-medium tracking-tight text-white leading-tight text-balance animate-fade-in" style="animation-delay: 0.2s;">
-          새로운 시작을 위한 <span class="italic text-gradient-gold font-semibold pr-2">가장 현명한 선택</span>
+      <div class="space-y-1 md:space-y-2 relative">
+        <h1 class="font-serif text-2xl md:text-4xl lg:text-5xl font-medium tracking-tight text-white leading-tight text-balance animate-fade-in" style="animation-delay: 0.2s;">
+          새로운 시작을 위한<br class="md:hidden" /> <span class="italic text-gradient-gold font-semibold pr-2">현명한 선택</span>
         </h1>
-        <p class="text-sm font-light text-slate-300 md:text-lg max-w-2xl md:max-w-5xl mx-auto leading-relaxed animate-fade-in break-keep" style="animation-delay: 0.3s;">
-          법률 전문가가 설계한 정밀 진단 시스템으로 귀하에게 최적화된 해결책을 제시해 드립니다.
+        <p class="text-xs font-light text-slate-300 md:text-base max-w-2xl md:max-w-4xl mx-auto leading-relaxed animate-fade-in break-keep" style="animation-delay: 0.3s;">
+          법률 전문가가 설계한 정밀 진단 시스템으로<br class="md:hidden" /> 최적의 해결책을 제시합니다.
         </p>
       </div>
     </div>
 
     <!-- 카드 섹션 -->
-    <div class="grid w-full grid-cols-1 gap-6 md:grid-cols-2 md:gap-10 animate-fade-in" style="animation-delay: 0.4s;">
+    <div class="relative grid w-full grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 animate-fade-in max-w-6xl mx-auto px-4" style="animation-delay: 0.4s;">
       <!-- 개인회생/파산 카드 -->
-      <button
-        class="group relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#1e293b] to-[#0f172a] p-8 md:p-12 text-left border border-white/5 transition-all duration-700 hover:border-accent-400/30 hover:shadow-[0_20px_80px_-20px_rgba(198,167,98,0.15)] hover:-translate-y-2 h-auto min-h-[380px] md:min-h-[520px] flex flex-col justify-between"
-        @click="goPersonal"
-      >
-        <!-- 배경 효과 -->
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay" />
-        <div class="absolute top-0 right-0 w-64 h-64 bg-accent-500/10 blur-[80px] rounded-full group-hover:bg-accent-500/20 transition-all duration-700" />
-        
-        <div class="relative z-10 space-y-8 md:space-y-10">
-          <div class="inline-flex h-20 w-20 md:h-24 md:w-24 items-center justify-center rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-lg transition-transform duration-700 group-hover:rotate-6 group-hover:bg-accent-500/20 group-hover:border-accent-400/30">
-            <User class="h-10 w-10 md:h-12 md:w-12 text-accent-200 transition-colors duration-500 group-hover:text-accent-100" stroke-width="1.5" />
+      <div class="relative group">
+        <button
+          ref="personalCard"
+          class="w-full relative overflow-hidden rounded-[2.5rem] bg-slate-900/60 p-8 md:p-10 text-left border-2 border-accent-400/30 transition-all duration-500 hover:border-accent-400 hover:shadow-[0_0_60px_rgba(198,167,98,0.35)] hover:-translate-y-2 h-auto min-h-[280px] md:min-h-[360px] flex flex-col justify-between backdrop-blur-xl ring-1 ring-accent-400/20 shadow-2xl"
+          @click="goPersonal"
+        >
+          <!-- 배경 효과 -->
+          <div class="absolute inset-0 bg-gradient-to-br from-accent-500/[0.15] via-transparent to-transparent opacity-100 transition-opacity duration-700" />
+          <div class="absolute -right-10 -top-10 w-40 h-40 bg-accent-500/30 blur-[60px] rounded-full transition-all duration-700 group-hover:scale-150 group-hover:bg-accent-500/40" />
+          
+          <div class="relative z-10 flex flex-col gap-6">
+            <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-accent-500/20 backdrop-blur-md border border-accent-400/50 shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:bg-accent-500/30 group-hover:border-accent-400 group-hover:shadow-accent-500/30">
+              <User class="h-8 w-8 text-accent-200 transition-colors duration-500 group-hover:text-white" stroke-width="2.5" />
+            </div>
+            
+            <div class="space-y-2">
+              <h2 class="font-serif text-xl md:text-4xl text-white tracking-wide leading-tight group-hover:text-accent-5 flex items-center gap-1.5 flex-wrap">
+                개인회생 <span class="text-accent-400/50">/</span> 파산
+              </h2>
+              <p class="text-sm md:text-lg font-light text-slate-100 leading-relaxed group-hover:text-white transition-colors duration-500">
+                막막한 채무 고민, <span class="text-accent-300 font-bold relative inline-block">합법적인 해결책<span class="absolute bottom-0 left-0 w-full h-[3px] bg-accent-400"></span></span>을<br class="hidden md:block" />
+                지금 바로 확인해보세요.
+              </p>
+            </div>
           </div>
           
-          <div class="space-y-3 md:space-y-4">
-            <h2 class="font-serif text-3xl md:text-5xl text-white tracking-wide leading-tight">개인회생 / 파산</h2>
-            <p class="text-lg md:text-xl font-light text-slate-400 leading-relaxed group-hover:text-slate-200 transition-colors duration-500">
-              과도한 빚으로 고통받는 분들을 위한<br />
-              <span class="text-accent-300 font-medium">합법적 채무 탕감</span> 제도입니다.
-            </p>
+          <div class="relative z-10 flex items-center justify-between border-t border-accent-400/30 pt-6 mt-6 group-hover:border-accent-400 transition-colors duration-500">
+            <span class="font-serif text-lg md:text-xl text-accent-100 font-semibold group-hover:text-white transition-all duration-300 group-hover:translate-x-2">
+              무료 진단 시작하기
+            </span>
+            <div class="grid h-12 w-12 place-items-center rounded-full bg-accent-500 border border-accent-400 shadow-lg transition-all duration-500 group-hover:bg-accent-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(198,167,98,0.6)] text-white">
+              <ChevronRight class="h-6 w-6" stroke-width="3.5" />
+            </div>
           </div>
-        </div>
-        
-        <div class="relative z-10 flex items-center justify-between border-t border-white/10 pt-8 mt-8 md:pt-10 md:mt-auto group-hover:border-accent-400/30 transition-colors duration-500">
-          <span class="font-serif text-lg md:text-xl text-slate-300 group-hover:text-accent-200 transition-colors duration-300">자가진단 시작하기</span>
-          <div class="grid h-12 w-12 md:h-14 md:w-14 place-items-center rounded-full bg-white/5 border border-white/10 transition-all duration-500 group-hover:bg-accent-500 group-hover:text-white group-hover:border-transparent group-hover:scale-110">
-            <ChevronRight class="h-6 w-6 md:h-7 md:w-7" stroke-width="2" />
-          </div>
-        </div>
-      </button>
+        </button>
+
+        <!-- 모바일 하단 유도 화살표 -->
+        <transition
+          enter-active-class="transition duration-300 ease-out"
+          enter-from-class="opacity-0 translate-y-4"
+          enter-to-class="opacity-100 translate-y-0"
+          leave-active-class="transition duration-200 ease-in"
+          leave-from-class="opacity-100 translate-y-0"
+          leave-to-class="opacity-0 translate-y-4"
+        >
+          <button 
+            v-if="showScrollBadge"
+            @click="scrollToCorporate"
+            class="absolute -bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 md:hidden animate-bounce z-20 cursor-pointer"
+          >
+            <div class="px-4 py-2 rounded-full bg-[#1e293b] border border-primary-300 shadow-[0_0_20px_rgba(56,189,248,0.4)] flex items-center justify-center">
+              <span class="text-[11px] font-bold tracking-tight text-primary-200 whitespace-nowrap leading-none">법인(기업) 회생/파산</span>
+            </div>
+            <ChevronDown class="h-5 w-5 text-primary-400" />
+          </button>
+        </transition>
+      </div>
 
       <!-- 법인회생/파산 카드 -->
       <button
-        class="group relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#1e293b] to-[#0f172a] p-8 md:p-12 text-left border border-white/5 transition-all duration-700 hover:border-primary-400/30 hover:shadow-[0_20px_80px_-20px_rgba(56,189,248,0.15)] hover:-translate-y-2 h-auto min-h-[380px] md:min-h-[520px] flex flex-col justify-between"
+        ref="corporateCard"
+        class="group relative overflow-hidden rounded-[2.5rem] bg-slate-900/60 p-8 md:p-10 text-left border-2 border-primary-400/30 transition-all duration-500 hover:border-primary-400 hover:shadow-[0_0_60px_rgba(56,189,248,0.35)] hover:-translate-y-2 h-auto min-h-[280px] md:min-h-[360px] flex flex-col justify-between backdrop-blur-xl ring-1 ring-primary-400/20 shadow-2xl"
         @click="goCorporate"
       >
         <!-- 배경 효과 -->
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay" />
-        <div class="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 blur-[80px] rounded-full group-hover:bg-primary-500/20 transition-all duration-700" />
+        <div class="absolute inset-0 bg-gradient-to-br from-primary-500/[0.15] via-transparent to-transparent opacity-100 transition-opacity duration-700" />
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-primary-500/30 blur-[60px] rounded-full transition-all duration-700 group-hover:scale-150 group-hover:bg-primary-500/40" />
         
-        <div class="relative z-10 space-y-8 md:space-y-10">
-          <div class="inline-flex h-20 w-20 md:h-24 md:w-24 items-center justify-center rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-lg transition-transform duration-700 group-hover:-rotate-6 group-hover:bg-primary-500/20 group-hover:border-primary-400/30">
-            <Building2 class="h-10 w-10 md:h-12 md:w-12 text-primary-200 transition-colors duration-500 group-hover:text-primary-100" stroke-width="1.5" />
+        <div class="relative z-10 flex flex-col gap-6">
+          <div class="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-500/20 backdrop-blur-md border border-primary-400/50 shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:-rotate-3 group-hover:bg-primary-500/30 group-hover:border-primary-400 group-hover:shadow-primary-500/30">
+            <Building2 class="h-8 w-8 text-primary-200 transition-colors duration-500 group-hover:text-white" stroke-width="2.5" />
           </div>
           
-          <div class="space-y-3 md:space-y-4">
-            <h2 class="font-serif text-3xl md:text-5xl text-white tracking-wide leading-tight">법인(기업)회생 / 파산</h2>
-            <p class="text-lg md:text-xl font-light text-slate-400 leading-relaxed group-hover:text-slate-200 transition-colors duration-500">
-              위기의 기업을 위한<br />
-              <span class="text-primary-300 font-medium">경영 정상화</span> 및 재무 구조조정 솔루션.
+          <div class="space-y-2">
+            <h2 class="font-serif text-xl md:text-4xl text-white tracking-wide leading-tight group-hover:text-primary-5 flex items-center gap-1.5 flex-wrap">
+              법인(기업) 회생 <span class="text-primary-400/50">/</span> 파산
+            </h2>
+            <p class="text-sm md:text-lg font-light text-slate-100 leading-relaxed group-hover:text-white transition-colors duration-500">
+              기업의 재도약을 위한 <span class="text-primary-300 font-bold relative inline-block">맞춤형 솔루션<span class="absolute bottom-0 left-0 w-full h-[3px] bg-primary-400"></span></span>을<br class="hidden md:block" />
+              전문가와 함께 설계하세요.
             </p>
           </div>
         </div>
         
-        <div class="relative z-10 flex items-center justify-between border-t border-white/10 pt-8 mt-8 md:pt-10 md:mt-auto group-hover:border-primary-500/30 transition-colors duration-500">
-          <span class="font-serif text-lg md:text-xl text-slate-300 group-hover:text-primary-200 transition-colors duration-300">기업진단 시작하기</span>
-          <div class="grid h-12 w-12 md:h-14 md:w-14 place-items-center rounded-full bg-white/5 border border-white/10 transition-all duration-500 group-hover:bg-primary-500 group-hover:text-white group-hover:border-transparent group-hover:scale-110">
-            <ChevronRight class="h-6 w-6 md:h-7 md:w-7" stroke-width="2" />
+        <div class="relative z-10 flex items-center justify-between border-t border-primary-400/30 pt-6 mt-6 group-hover:border-primary-400 transition-colors duration-500">
+          <span class="font-serif text-lg md:text-xl text-primary-100 font-semibold group-hover:text-white transition-all duration-300 group-hover:translate-x-2">
+            기업 진단 시작하기
+          </span>
+          <div class="grid h-12 w-12 place-items-center rounded-full bg-primary-500 border border-primary-400 shadow-lg transition-all duration-500 group-hover:bg-primary-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(56,189,248,0.6)] text-white">
+            <ChevronRight class="h-6 w-6" stroke-width="3.5" />
           </div>
         </div>
       </button>
     </div>
 
-    <div class="w-full text-center pb-8 animate-fade-in" style="animation-delay: 0.5s;">
-      <p class="text-sm font-light text-slate-500 tracking-wider">
+    <div ref="footerSection" class="w-full text-center pb-4 animate-fade-in" style="animation-delay: 0.5s;">
+      <p class="text-[10px] md:text-xs font-light text-slate-500 tracking-wider">
         ※ 모든 상담 내용은 철저하게 <span class="text-slate-400 font-medium border-b border-slate-600 pb-0.5">비밀이 보장</span>됩니다.
       </p>
     </div>

@@ -61,25 +61,25 @@ const colorMap = {
       :class="colorMap[type].gradient"
     />
 
-    <div class="space-y-6 p-6 md:p-10">
-      <div class="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
+    <div class="space-y-4 p-5 md:p-10">
+      <div class="flex flex-col gap-4 md:flex-row md:items-start md:gap-8">
         <div 
-          class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/5 shadow-inner ring-1 ring-white/10 md:h-20 md:w-20"
+          class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/5 shadow-inner ring-1 ring-white/10 md:h-20 md:w-20"
         >
           <component 
             :is="iconMap[type]" 
-            class="h-8 w-8 md:h-10 md:w-10"
+            class="h-7 w-7 md:h-10 md:w-10"
             :class="colorMap[type].icon"
           />
         </div>
-        <div class="flex-1 space-y-3">
+        <div class="flex-1 space-y-2 md:space-y-3">
           <div 
-            class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold tracking-wide shadow-sm backdrop-blur-sm"
+            class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] md:text-xs font-bold tracking-wide shadow-sm backdrop-blur-sm"
             :class="[colorMap[type].badge]"
           >
             진단 결과
           </div>
-          <h2 class="text-xl font-serif font-bold leading-tight text-white md:text-3xl lg:text-4xl text-balance">
+          <h2 class="text-lg font-serif font-bold leading-tight text-white md:text-3xl lg:text-4xl text-balance break-keep">
             {{ headline }}
           </h2>
         </div>
@@ -87,13 +87,13 @@ const colorMap = {
 
       <div class="h-px w-full bg-white/10" />
 
-      <div class="space-y-6">
-        <p class="text-base leading-relaxed text-slate-200 md:text-xl font-light">
+      <div class="space-y-4 md:space-y-6">
+        <p class="text-sm leading-relaxed text-slate-200 md:text-xl font-light break-keep">
           {{ solution }}
         </p>
 
-        <div v-if="details.length > 0" class="rounded-2xl p-6 md:p-8" :class="[colorMap[type].bg, colorMap[type].border, 'border']">
-          <div class="text-sm font-bold text-slate-100 md:text-lg mb-4 flex items-center gap-2">
+        <div v-if="details.length > 0" class="rounded-xl p-5 md:rounded-2xl md:p-8" :class="[colorMap[type].bg, colorMap[type].border, 'border']">
+          <div class="text-xs font-bold text-slate-100 md:text-lg mb-3 md:mb-4 flex items-center gap-2">
             <span class="text-accent-400">💡</span> 핵심 포인트
           </div>
           <ul class="space-y-3">

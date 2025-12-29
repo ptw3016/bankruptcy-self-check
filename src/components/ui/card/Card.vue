@@ -19,6 +19,7 @@ const cardVariants = cva(
         solid: 'bg-[#1e293b] border border-white/5 shadow-xl',
         gradient: 'bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 shadow-lg',
         glow: 'bg-white/5 backdrop-blur-2xl border border-accent-400/30 shadow-[0_0_30px_rgba(198,167,98,0.15)]',
+        none: '',
       },
       hoverable: {
         true: 'cursor-pointer hover:-translate-y-1 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] hover:border-accent-400/30 active:scale-[0.98] active:translate-y-0',

@@ -39,12 +39,12 @@ function handleSchedule() {
     <div class="space-y-4">
       <Button
         size="kiosk"
-        class="w-full justify-between gap-4 px-8 py-6 text-lg font-bold md:text-xl bg-accent-600 hover:bg-accent-500 text-white shadow-[0_0_20px_rgba(198,167,98,0.3)] hover:shadow-[0_0_30px_rgba(198,167,98,0.5)] border-none transition-all duration-300 rounded-2xl h-auto"
+        class="w-full justify-between gap-3 px-4 py-5 text-base font-bold md:px-8 md:py-6 md:text-xl bg-accent-600 hover:bg-accent-500 text-white shadow-[0_0_20px_rgba(198,167,98,0.3)] hover:shadow-[0_0_30px_rgba(198,167,98,0.5)] border-none transition-all duration-300 rounded-2xl h-auto"
         @click="handleCall(phoneNumber)"
       >
-        <span class="flex items-center gap-3">
-          <Phone class="h-6 w-6 md:h-7 md:w-7" stroke-width="2.5" />
-          지금 바로 무료 전화상담
+        <span class="flex items-center gap-2 md:gap-3 overflow-hidden">
+          <Phone class="h-5 w-5 shrink-0 md:h-7 md:w-7" stroke-width="2.5" />
+          <span class="truncate">지금 바로 무료 전화상담</span>
         </span>
         <span class="opacity-90 text-sm font-medium hidden md:inline-block bg-white/20 px-3 py-1 rounded-full">24시간 가능</span>
       </Button>
@@ -52,12 +52,12 @@ function handleSchedule() {
       <Button
         size="kiosk"
         variant="outline"
-        class="w-full justify-between gap-4 px-8 py-6 text-lg font-bold md:text-xl border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30 h-auto rounded-2xl"
+        class="w-full justify-between gap-3 px-4 py-5 text-base font-bold md:px-8 md:py-6 md:text-xl border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30 h-auto rounded-2xl"
         @click="handleKakao(kakaoUrl)"
       >
-        <span class="flex items-center gap-3">
-          <MessageCircle class="h-6 w-6 md:h-7 md:w-7" stroke-width="2.5" />
-          카카오톡으로 편하게 물어보기
+        <span class="flex items-center gap-2 md:gap-3 overflow-hidden">
+          <MessageCircle class="h-5 w-5 shrink-0 md:h-7 md:w-7" stroke-width="2.5" />
+          <span class="truncate">카카오톡으로 편하게 물어보기</span>
         </span>
       </Button>
 
@@ -65,12 +65,12 @@ function handleSchedule() {
         v-if="showSchedule"
         size="kiosk"
         variant="outline"
-        class="w-full justify-between gap-4 px-8 py-6 text-lg font-bold md:text-xl border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30 h-auto rounded-2xl"
+        class="w-full justify-between gap-3 px-4 py-5 text-base font-bold md:px-8 md:py-6 md:text-xl border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30 h-auto rounded-2xl"
         @click="handleSchedule"
       >
-        <span class="flex items-center gap-3">
-          <Calendar class="h-6 w-6 md:h-7 md:w-7" stroke-width="2.5" />
-          원하는 시간에 상담 예약하기
+        <span class="flex items-center gap-2 md:gap-3 overflow-hidden">
+          <Calendar class="h-5 w-5 shrink-0 md:h-7 md:w-7" stroke-width="2.5" />
+          <span class="truncate">원하는 시간에 상담 예약하기</span>
         </span>
       </Button>
     </div>
