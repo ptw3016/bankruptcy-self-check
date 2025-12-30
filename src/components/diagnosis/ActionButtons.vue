@@ -1,6 +1,8 @@
 <script setup>
+import { ref } from 'vue'
 import { Phone, MessageCircle, Calendar } from 'lucide-vue-next'
 import Button from '../ui/button/Button.vue'
+import AlertDialog from '../ui/AlertDialog.vue'
 
 defineProps({
   phoneNumber: {
@@ -21,16 +23,22 @@ defineProps({
   }
 })
 
+const isAlertOpen = ref(false)
+
+function showAlert() {
+  isAlertOpen.value = true
+}
+
 function handleCall(phoneNumber) {
-  window.location.href = `tel:${phoneNumber}`
+  showAlert()
 }
 
 function handleKakao(url) {
-  window.open(url, '_blank')
+  showAlert()
 }
 
 function handleSchedule() {
-  alert('상담 예약 기능은 준비 중입니다.')
+  showAlert()
 }
 </script>
 
@@ -39,39 +47,53 @@ function handleSchedule() {
     <div class="space-y-4">
       <Button
         size="kiosk"
-        class="w-full justify-between gap-3 px-4 py-5 text-base font-bold md:px-8 md:py-6 md:text-xl bg-accent-600 hover:bg-accent-500 text-white shadow-[0_0_20px_rgba(198,167,98,0.3)] hover:shadow-[0_0_30px_rgba(198,167,98,0.5)] border-none transition-all duration-300 rounded-2xl h-auto"
+        class="group w-full flex items-center gap-3 px-3 py-5 text-base font-bold md:px-5 md:py-7 md:text-xl bg-gradient-to-br from-accent-600 to-accent-700 hover:from-accent-500 hover:to-accent-600 text-white shadow-[0_10px_30px_-10px_rgba(198,167,98,0.5)] hover:shadow-[0_15px_40px_-10px_rgba(198,167,98,0.6)] hover:-translate-y-1 border-none transition-all duration-300 rounded-2xl h-auto relative overflow-hidden"
         @click="handleCall(phoneNumber)"
       >
-        <span class="flex items-center gap-2 md:gap-3 overflow-hidden">
-          <Phone class="h-5 w-5 shrink-0 md:h-7 md:w-7" stroke-width="2.5" />
-          <span class="truncate">지금 바로 무료 전화상담</span>
-        </span>
-        <span class="opacity-90 text-sm font-medium hidden md:inline-block bg-white/20 px-3 py-1 rounded-full">24시간 가능</span>
+        <div class="flex items-center gap-4 md:gap-7 min-w-0">
+          <div class="flex h-10 w-10 md:h-14 md:w-14 shrink-0 items-center justify-center rounded-xl bg-white/20 group-hover:bg-white/30 transition-colors">
+            <Phone class="h-5 w-5 md:h-7 md:w-7" stroke-width="2.5" />
+          </div>
+          <div class="flex flex-col items-start gap-0.5 md:gap-1.5">
+            <span class="break-keep md:whitespace-nowrap">지금 바로 전화상담</span>
+            <span class="text-[10px] md:text-xs font-medium opacity-70">클릭 시 바로 연결됩니다</span>
+          </div>
+        </div>
       </Button>
 
       <Button
         size="kiosk"
         variant="outline"
-        class="w-full justify-between gap-3 px-4 py-5 text-base font-bold md:px-8 md:py-6 md:text-xl border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30 h-auto rounded-2xl"
+        class="group w-full flex items-center gap-3 px-3 py-5 text-base font-bold md:px-5 md:py-7 md:text-xl border-white/10 bg-white/5 text-white hover:bg-white/10 hover:border-white/20 hover:-translate-y-1 h-auto rounded-2xl transition-all duration-300 shadow-xl"
         @click="handleKakao(kakaoUrl)"
       >
-        <span class="flex items-center gap-2 md:gap-3 overflow-hidden">
-          <MessageCircle class="h-5 w-5 shrink-0 md:h-7 md:w-7" stroke-width="2.5" />
-          <span class="truncate">카카오톡으로 편하게 물어보기</span>
-        </span>
+        <div class="flex items-center gap-4 md:gap-7 min-w-0">
+          <div class="flex h-10 w-10 md:h-14 md:w-14 shrink-0 items-center justify-center rounded-xl bg-[#FEE500]/10 group-hover:bg-[#FEE500]/20 transition-colors">
+            <MessageCircle class="h-5 w-5 md:h-7 md:w-7 text-[#FEE500]" stroke-width="2.5" />
+          </div>
+          <div class="flex flex-col items-start gap-0.5 md:gap-1.5">
+            <span class="break-keep md:whitespace-nowrap">카카오톡 채팅문의</span>
+            <span class="text-[10px] md:text-xs font-medium text-slate-400">실시간 채팅 대기 중</span>
+          </div>
+        </div>
       </Button>
 
       <Button
         v-if="showSchedule"
         size="kiosk"
         variant="outline"
-        class="w-full justify-between gap-3 px-4 py-5 text-base font-bold md:px-8 md:py-6 md:text-xl border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30 h-auto rounded-2xl"
+        class="group w-full flex items-center gap-3 px-3 py-5 text-base font-bold md:px-5 md:py-7 md:text-xl border-white/10 bg-white/5 text-white hover:bg-white/10 hover:border-white/20 hover:-translate-y-1 h-auto rounded-2xl transition-all duration-300 shadow-xl"
         @click="handleSchedule"
       >
-        <span class="flex items-center gap-2 md:gap-3 overflow-hidden">
-          <Calendar class="h-5 w-5 shrink-0 md:h-7 md:w-7" stroke-width="2.5" />
-          <span class="truncate">원하는 시간에 상담 예약하기</span>
-        </span>
+        <div class="flex items-center gap-4 md:gap-7 min-w-0">
+          <div class="flex h-10 w-10 md:h-14 md:w-14 shrink-0 items-center justify-center rounded-xl bg-accent-500/10 group-hover:bg-accent-500/20 transition-colors">
+            <Calendar class="h-5 w-5 md:h-7 md:w-7 text-accent-400" stroke-width="2.5" />
+          </div>
+          <div class="flex flex-col items-start gap-0.5 md:gap-1.5">
+            <span class="break-keep md:whitespace-nowrap">방문 상담 예약하기</span>
+            <span class="text-[10px] md:text-xs font-medium text-slate-400">변호사가 직접 연락드립니다</span>
+          </div>
+        </div>
       </Button>
     </div>
 
@@ -86,5 +108,11 @@ function handleSchedule() {
         * 상담은 무료이며, 모든 내용은 비밀이 철저히 보장됩니다.
       </p>
     </div>
+
+    <AlertDialog
+      :is-open="isAlertOpen"
+      message="해당 서비스는 현재 준비 중이며, 추후 구현될 예정입니다. 빠른 시일 내에 찾아뵙겠습니다."
+      @close="isAlertOpen = false"
+    />
   </div>
 </template>

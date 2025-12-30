@@ -37,8 +37,8 @@ const progress = computed(() => {
       </button>
       <span v-else class="text-slate-400 font-medium tracking-wide">Progress</span>
       
-      <div class="font-mono bg-accent-400/10 px-2 py-0.5 rounded-md md:px-3 md:py-1 border border-accent-400/20">
-        <span class="font-bold text-accent-400">{{ currentStep }}</span>
+      <div class="font-mono px-2 py-0.5 md:px-3 md:py-1">
+        <span class="font-bold text-accent-300">{{ currentStep }}</span>
         <span class="text-slate-400"> / {{ totalSteps }}</span>
       </div>
     </div>

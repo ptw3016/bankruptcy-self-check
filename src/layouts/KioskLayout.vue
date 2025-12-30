@@ -10,7 +10,7 @@ const route = useRoute()
 const canGoBack = computed(() => window.history.length > 1 && route.path !== '/')
 
 function goHome() {
-  router.push('/')
+  router.push({ name: 'home' })
 }
 
 function goBack() {
@@ -23,7 +23,7 @@ function goBack() {
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col bg-[#0f1216] text-slate-50 overflow-hidden font-sans selection:bg-accent-900 selection:text-white relative">
+  <div class="flex min-h-dvh flex-col bg-[#0f1216] text-slate-50 font-sans selection:bg-accent-900 selection:text-white relative">
     <!-- 노이즈 텍스처 오버레이 -->
     <div class="noise-overlay" />
 
@@ -37,13 +37,13 @@ function goBack() {
 
     <header class="sticky top-0 z-50 border-b border-white/5 bg-[#0f1216]/80 backdrop-blur-xl shadow-lg transition-all duration-300">
       <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 md:h-20 md:px-8">
-        <div class="flex items-center gap-3 group cursor-pointer" @click="goHome">
-          <span class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-accent-400 to-accent-600 text-[#0f1216] shadow-[0_0_20px_rgba(198,167,98,0.3)] transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3 border border-accent-300/20">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scale"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+        <div class="flex items-center gap-2 md:gap-3 group cursor-pointer" @click="goHome">
+          <span class="grid h-8 w-8 md:h-10 md:w-10 place-items-center rounded-lg md:rounded-xl bg-gradient-to-br from-accent-400 to-accent-600 text-[#0f1216] shadow-[0_0_20px_rgba(198,167,98,0.3)] transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3 border border-accent-300/20">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scale md:w-5 md:h-5"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
           </span>
           <div class="flex flex-col">
-            <span class="font-serif text-lg font-bold tracking-wide text-white leading-none mb-1">법률 키오스크</span>
-            <span class="text-[10px] tracking-[0.2em] text-accent-300 font-medium uppercase opacity-80">Legal Diagnosis System</span>
+            <span class="font-serif text-base md:text-lg font-bold tracking-wide text-white leading-none mb-0.5 md:mb-1">법률 키오스크</span>
+            <span class="text-[8px] md:text-[10px] tracking-[0.2em] text-accent-300 font-medium uppercase opacity-80">Legal Diagnosis System</span>
           </div>
         </div>
         <div v-if="route.path !== '/'" class="flex items-center gap-2">

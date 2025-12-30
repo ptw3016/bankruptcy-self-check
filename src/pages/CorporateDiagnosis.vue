@@ -216,16 +216,19 @@ function goBack() {
       </template>
     </QuestionCard>
 
-    <div v-else class="mx-auto flex max-w-2xl flex-col justify-center space-y-8 px-4 py-10 w-full animate-fade-in">
-      <div class="mb-4">
-        <Button
-          variant="ghost"
-          class="group -ml-2 gap-2 text-slate-400 hover:text-white hover:bg-white/5"
-          @click="goBack"
-        >
-          <ArrowLeft class="h-5 w-5 transition-transform group-hover:-translate-x-1" />
-          다시 진단하기
-        </Button>
+    <div v-else class="mx-auto flex max-w-2xl flex-col space-y-4 px-4 py-4 md:max-w-3xl md:px-12 md:py-10 w-full animate-fade-in">
+      <div class="mb-2 md:mb-8">
+        <div class="w-full">
+          <div class="flex items-center text-xs md:text-lg">
+            <button 
+              class="flex items-center gap-1.5 text-slate-300 hover:text-white transition-colors font-medium px-2 -ml-2 py-1 rounded-md hover:bg-white/5 md:gap-2"
+              @click="goBack"
+            >
+              <ArrowLeft class="h-3.5 w-3.5 md:h-5 md:w-5" />
+              <span>다시 진단하기</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="space-y-4 text-center">
