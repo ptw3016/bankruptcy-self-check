@@ -10,7 +10,7 @@ const route = useRoute()
 const canGoBack = computed(() => window.history.length > 1 && route.path !== '/')
 
 function goHome() {
-  router.push({ name: 'home' })
+  window.location.href = '/'
 }
 
 function goBack() {

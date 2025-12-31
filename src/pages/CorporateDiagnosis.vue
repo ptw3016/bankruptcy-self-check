@@ -1,7 +1,7 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ArrowLeft } from 'lucide-vue-next'
+import { ArrowLeft, ChevronDown, Check, Home } from 'lucide-vue-next'
 import Button from '../components/ui/button/Button.vue'
 import ProgressBar from '../components/diagnosis/ProgressBar.vue'
 import IntroScreen from '../components/diagnosis/IntroScreen.vue'
@@ -12,6 +12,8 @@ import ActionButtons from '../components/diagnosis/ActionButtons.vue'
 const router = useRouter()
 
 const currentStep = ref(1)
+const isSubmitted = ref(false)
+const openSelectId = ref(null)
 const answers = ref({
   debtScale: '',
   assetDebtRatio: '',
@@ -165,20 +167,64 @@ const result = computed(() => {
 })
 
 function nextQuestion() {
-  if (currentStep.value < questions.length) {
+  if (currentStep.value <= questions.length) {
     currentStep.value++
-  } else {
-    currentStep.value = questions.length + 1
   }
 }
 
+function submitDiagnosis() {
+  isSubmitted.value = true
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+function goHome() {
+  window.location.href = '/'
+}
+
 function goBack() {
+  if (isSubmitted.value) {
+    isSubmitted.value = false
+    return
+  }
+  
   if (currentStep.value > 1) {
     currentStep.value--
   } else {
     router.push('/corporate')
   }
 }
+
+function toggleSelect(id) {
+  if (openSelectId.value === id) {
+    openSelectId.value = null
+  } else {
+    openSelectId.value = id
+  }
+}
+
+function selectOption(id, value) {
+  answers.value[id] = value
+  openSelectId.value = null
+}
+
+function getSelectedLabel(q) {
+  return q.options.find(opt => opt.value === answers.value[q.id])?.label || '선택해주세요'
+}
+
+// Close select when clicking outside
+function handleClickOutside(event) {
+  if (openSelectId.value && !event.target.closest('.custom-select-container')) {
+    openSelectId.value = null
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <template>
@@ -191,6 +237,13 @@ function goBack() {
         @click="nextQuestion"
       >
         다음
+      </Button>
+      <Button
+        v-else-if="!isSubmitted"
+        class="w-full h-auto text-lg font-bold bg-gradient-to-r from-primary-700 via-primary-600 to-primary-700 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.3)] border-[0.5px] border-primary-400/30 py-5 px-3"
+        @click="submitDiagnosis"
+      >
+        최종 결과 확인하기
       </Button>
     </div>
   </div>
@@ -216,6 +269,104 @@ function goBack() {
       </template>
     </QuestionCard>
 
+    <div v-else-if="!isSubmitted" class="mx-auto flex max-w-2xl flex-col space-y-4 px-4 py-4 md:max-w-3xl md:px-12 md:py-10 w-full animate-fade-in">
+      <div class="mb-2 md:mb-8">
+        <div class="w-full">
+          <div class="flex items-center text-xs md:text-lg">
+            <button 
+              class="flex items-center gap-1.5 text-slate-300 hover:text-white transition-colors font-medium px-2 -ml-2 py-1 rounded-md hover:bg-white/5 md:gap-2"
+              @click="goBack"
+            >
+              <ArrowLeft class="h-3.5 w-3.5 md:h-5 md:w-5" />
+              <span>이전</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-4 text-center">
+        <div class="inline-flex items-center gap-2 rounded-full border border-primary-400/30 bg-primary-500/10 px-4 py-1.5 text-xs font-semibold text-primary-300">
+          진단 내용 확인
+        </div>
+        <h1 class="text-3xl font-serif font-bold text-white md:text-4xl tracking-tight break-keep">
+          선택하신 내역을 확인해주세요
+        </h1>
+        <p class="text-slate-400 text-sm md:text-base break-keep mx-auto max-w-[280px] md:max-w-none">
+          내용을 수정하시려면 항목을 클릭하여 다시 선택할 수 있습니다.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <div 
+          v-for="(q, index) in questions" 
+          :key="q.id"
+          class="group relative rounded-xl border border-white/10 bg-white/5 p-5 transition-all hover:border-primary-400/30 hover:bg-white/10 custom-select-container"
+        >
+          <div class="flex flex-col space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-primary-400/80 uppercase tracking-widest">Question 0{{ index + 1 }}</span>
+            </div>
+            <h3 class="text-sm font-medium text-slate-300 md:text-base">{{ q.question }}</h3>
+            
+            <div class="relative mt-2">
+              <button
+                @click.stop="toggleSelect(q.id)"
+                class="w-full flex items-center justify-between rounded-lg border border-white/10 bg-slate-900/50 px-4 py-3.5 text-sm text-white transition-all hover:border-primary-400/30 focus:border-primary-400/50 outline-none min-h-[52px]"
+                :class="{ 'ring-1 ring-primary-400/50 border-primary-400/50': openSelectId === q.id }"
+              >
+                <span class="font-medium text-left break-keep pr-2">{{ getSelectedLabel(q) }}</span>
+                <ChevronDown 
+                  class="h-4 w-4 text-slate-400 transition-transform duration-300 shrink-0" 
+                  :class="{ 'rotate-180 text-primary-400': openSelectId === q.id }"
+                />
+              </button>
+
+              <Transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="translate-y-1 opacity-0"
+                enter-to-class="translate-y-0 opacity-100"
+                leave-active-class="transition duration-150 ease-in"
+                leave-from-class="translate-y-0 opacity-100"
+                leave-to-class="translate-y-1 opacity-0"
+              >
+                <div 
+                  v-if="openSelectId === q.id"
+                  class="absolute left-0 right-0 z-[80] mt-2 max-h-60 overflow-y-auto rounded-xl border border-white/10 bg-[#1a1f26] p-1 shadow-2xl backdrop-blur-xl custom-scrollbar"
+                >
+                  <button
+                    v-for="opt in q.options"
+                    :key="opt.value"
+                    @click.stop="selectOption(q.id, opt.value)"
+                    class="flex w-full items-center justify-between rounded-lg px-4 py-3 text-left text-sm transition-all hover:bg-white/5 group/opt"
+                    :class="[
+                      answers[q.id] === opt.value 
+                        ? 'bg-primary-500/10 text-primary-300' 
+                        : 'text-slate-300 hover:text-white'
+                    ]"
+                  >
+                    <span class="break-keep pr-4">{{ opt.label }}</span>
+                    <Check 
+                      v-if="answers[q.id] === opt.value" 
+                      class="h-4 w-4 text-primary-400 shrink-0" 
+                    />
+                  </button>
+                </div>
+              </Transition>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-6 hidden md:block">
+        <Button
+          class="w-full h-auto text-lg font-bold bg-gradient-to-r from-primary-700 via-primary-600 to-primary-700 hover:from-primary-600 hover:via-primary-500 hover:to-primary-600 text-white border-[0.5px] border-primary-400/30 shadow-[0_0_20px_rgba(37,99,235,0.2)] hover:shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-all duration-500 rounded-none py-5"
+          @click="submitDiagnosis"
+        >
+          최종 결과 확인하기
+        </Button>
+      </div>
+    </div>
+
     <div v-else class="mx-auto flex max-w-2xl flex-col space-y-4 px-4 py-4 md:max-w-3xl md:px-12 md:py-10 w-full animate-fade-in">
       <div class="mb-2 md:mb-8">
         <div class="w-full">
@@ -225,7 +376,7 @@ function goBack() {
               @click="goBack"
             >
               <ArrowLeft class="h-3.5 w-3.5 md:h-5 md:w-5" />
-              <span>다시 진단하기</span>
+              <span>다시 검토하기</span>
             </button>
           </div>
         </div>
@@ -255,10 +406,19 @@ function goBack() {
         region-note="부산/울산/창원 지역 제조업/조선기자재/유통업 회생 성공 노하우 보유"
       />
 
-      <div class="text-center pt-6">
+      <div class="flex flex-col items-center gap-4 pt-8 text-center">
         <Button
           variant="ghost"
-          class="text-slate-500 hover:text-slate-300 hover:bg-transparent text-sm"
+          class="text-slate-500 hover:text-slate-300 hover:bg-white/5 text-sm gap-2"
+          @click="goHome"
+        >
+          <Home class="h-4 w-4" />
+          처음으로 돌아가기
+        </Button>
+        
+        <Button
+          variant="ghost"
+          class="text-slate-600 hover:text-slate-400 hover:bg-transparent text-xs"
           @click="router.push('/corporate')"
         >
           법인회생/파산 안내로 돌아가기
