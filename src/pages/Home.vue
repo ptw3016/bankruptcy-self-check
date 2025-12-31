@@ -143,9 +143,9 @@ function goCorporate() {
             </div>
             
             <div class="space-y-3">
-              <h2 class="font-serif tracking-tight leading-[1.2] drop-shadow-sm flex flex-col items-start">
-                <span class="text-gradient-gold text-5xl md:text-5xl font-extrabold block mb-1">개인</span>
-                <span class="text-gradient-gold text-3xl md:text-4xl font-semibold opacity-90 block">회생/파산</span>
+              <h2 class="font-serif tracking-tight leading-[1.2] drop-shadow-sm flex flex-col md:flex-row md:items-baseline md:gap-3 items-start">
+                <span class="text-gradient-gold text-5xl md:text-5xl font-extrabold block mb-1 md:mb-0">개인</span>
+                <span class="text-gradient-gold text-3xl md:text-5xl font-semibold md:font-extrabold opacity-90 block md:inline">회생/파산</span>
               </h2>
               <p class="text-sm md:text-lg font-light text-slate-100 leading-relaxed group-hover:text-white transition-colors duration-500">
                 막막한 채무 고민, <span class="text-accent-300 font-bold relative inline-block">합법적인 해결책<span class="absolute bottom-0 left-0 w-full h-[3px] bg-accent-400"></span></span>을<br class="hidden md:block" />
@@ -202,11 +202,11 @@ function goCorporate() {
           </div>
           
           <div class="space-y-3">
-            <h2 class="font-serif tracking-tight leading-[1.2] drop-shadow-sm flex flex-col items-start">
-              <span class="text-gradient-blue text-5xl md:text-5xl font-extrabold block mb-1">
+            <h2 class="font-serif tracking-tight leading-[1.2] drop-shadow-sm flex flex-col md:flex-row md:items-baseline md:gap-3 items-start">
+              <span class="text-gradient-blue text-5xl md:text-5xl font-extrabold block mb-1 md:mb-0">
                 법인<span class="text-[0.6em] font-black text-white ml-1">(기업)</span>
               </span>
-              <span class="text-gradient-blue text-3xl md:text-4xl font-semibold opacity-90 block">회생/파산</span>
+              <span class="text-gradient-blue text-3xl md:text-5xl font-semibold md:font-extrabold opacity-90 block md:inline">회생/파산</span>
             </h2>
             <p class="text-sm md:text-lg font-light text-slate-100 leading-relaxed group-hover:text-white transition-colors duration-500">
               기업의 재도약을 위한 <span class="text-primary-300 font-bold relative inline-block">맞춤형 솔루션<span class="absolute bottom-0 left-0 w-full h-[3px] bg-primary-400"></span></span>을<br class="hidden md:block" />
