@@ -42,17 +42,17 @@ function handleNext() {
     </div>
     <div class="flex-1 flex flex-col min-h-0">
       <div class="shrink-0 space-y-1 text-center md:text-left md:space-y-4 mb-4 md:mb-8">
-        <h2 class="text-lg font-serif font-bold leading-snug text-white md:text-3xl lg:text-4xl text-balance break-keep tracking-wide">
+        <h2 class="text-2xl font-serif font-bold leading-snug text-white md:text-3xl lg:text-4xl text-balance break-keep tracking-wide">
           {{ question }}
         </h2>
-        <p class="text-xs text-slate-300 font-light pb-1 md:text-lg md:pb-2">가장 적절한 항목을 선택해 주세요</p>
+        <p class="text-base text-slate-300 font-light pb-1 md:text-lg md:pb-2">가장 적절한 항목을 선택해 주세요</p>
       </div>
 
       <div class="flex-1 flex flex-col justify-start overflow-y-auto min-h-0 space-y-2 md:space-y-5 px-1 py-2 custom-scrollbar">
         <button
           v-for="(option, index) in options"
           :key="index"
-          class="group relative w-full shrink-0 overflow-hidden rounded-none border-[0.5px] p-3 text-left transition-all duration-300 md:p-6 md:rounded-none"
+          class="group relative w-full shrink-0 overflow-hidden rounded-none border-[0.5px] p-5 text-left transition-all duration-300 md:p-6 md:rounded-none"
           :class="[
             selectedOption === option.value
               ? 'border-accent-400/60 bg-accent-500/5 shadow-[0_0_15px_rgba(198,167,98,0.1)] ring-[0.5px] ring-accent-400/30 z-10'
@@ -63,7 +63,7 @@ function handleNext() {
           <div class="flex items-center justify-between gap-3 md:gap-6 w-full">
             <div class="flex-1 text-left">
               <div 
-                class="text-sm font-medium transition-colors md:text-xl leading-tight"
+                class="text-lg font-medium transition-colors md:text-xl leading-tight"
                 :class="[
                   selectedOption === option.value
                     ? 'text-accent-100 font-bold'
@@ -74,7 +74,7 @@ function handleNext() {
               </div>
               <div 
                 v-if="option.description"
-                class="mt-1 text-[11px] transition-colors duration-300 leading-tight md:text-base md:mt-2"
+                class="mt-2 text-sm transition-colors duration-300 leading-tight md:text-base md:mt-2"
                 :class="[
                   selectedOption === option.value
                     ? 'text-accent-200/80'

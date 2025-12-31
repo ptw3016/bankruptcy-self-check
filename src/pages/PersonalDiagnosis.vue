@@ -207,7 +207,7 @@ onUnmounted(() => {
       <div class="relative w-full max-w-2xl mx-auto pointer-events-auto px-5 pb-safe-offset-2">
         <Button
           v-if="currentStep <= questions.length"
-          class="w-full h-auto text-sm font-bold leading-tight bg-gradient-to-r from-accent-700 via-accent-600 to-accent-700 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.3)] border-[0.5px] border-accent-400/30 rounded-none py-3"
+          class="w-full h-auto text-lg font-bold leading-tight bg-gradient-to-r from-accent-700 via-accent-600 to-accent-700 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.3)] border-[0.5px] border-accent-400/30 rounded-none py-5"
           :disabled="!answers[currentQuestion?.id]"
           @click="nextQuestion"
         >
@@ -215,7 +215,7 @@ onUnmounted(() => {
         </Button>
         <Button
           v-else-if="!isSubmitted"
-          class="w-full h-auto text-sm font-bold leading-tight bg-gradient-to-r from-accent-700 via-accent-600 to-accent-700 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.3)] border-[0.5px] border-accent-400/30 rounded-none py-3"
+          class="w-full h-auto text-lg font-bold leading-tight bg-gradient-to-r from-accent-700 via-accent-600 to-accent-700 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.3)] border-[0.5px] border-accent-400/30 rounded-none py-5"
           @click="submitDiagnosis"
         >
           최종 결과 확인하기

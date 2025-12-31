@@ -186,7 +186,7 @@ function goBack() {
     <div class="w-full max-w-2xl mx-auto pointer-events-auto px-1">
       <Button
         v-if="currentStep <= questions.length"
-        class="w-full h-auto text-sm font-bold bg-gradient-to-r from-primary-700 via-primary-600 to-primary-700 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.3)] border-[0.5px] border-primary-400/30 py-3 px-3"
+        class="w-full h-auto text-lg font-bold bg-gradient-to-r from-primary-700 via-primary-600 to-primary-700 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.3)] border-[0.5px] border-primary-400/30 py-5 px-3"
         :disabled="!answers[currentQuestion?.id]"
         @click="nextQuestion"
       >
