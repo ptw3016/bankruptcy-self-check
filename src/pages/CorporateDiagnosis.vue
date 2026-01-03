@@ -178,7 +178,7 @@ function submitDiagnosis() {
 }
 
 function goHome() {
-  window.location.href = '/'
+  router.push('/')
 }
 
 function goBack() {

@@ -147,8 +147,9 @@ function submitDiagnosis() {
 }
 
 function goHome() {
-  window.location.href = '/'
+  router.push('/')
 }
+
 function goBack() {
   if (isSubmitted.value) {
     isSubmitted.value = false
